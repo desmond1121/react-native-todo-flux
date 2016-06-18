@@ -1,0 +1,17 @@
+{
+  "name": "TodoFluxApp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-native": "^0.27.2",
+    "flux": "^2.1.1",
+    "object-assign": "^4.1.0",
+    "moment": "2.13.0",
+    "keymirror": "~0.1.0",
+    "events": "1.1.0"
+  }
+}
