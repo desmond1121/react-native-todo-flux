@@ -1,4 +1,4 @@
-var keyMirror = require('keymirror');
+const keyMirror = require('keymirror');
 
 exports.ROUTE = {
   main: {

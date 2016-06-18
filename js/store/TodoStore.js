@@ -2,16 +2,16 @@ import {
   AsyncStorage
 } from 'react-native';
 
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var TodoDispatcher = require('../dispatcher/TodoDispatcher');
-var TodoConstants = require('../common/TodoConstants');
-var moment = require('moment');
+const EventEmitter = require('events').EventEmitter;
+const assign = require('object-assign');
+const TodoDispatcher = require('../dispatcher/TodoDispatcher');
+const TodoConstants = require('../common/TodoConstants');
+const moment = require('moment');
 
 class TodoEmitter extends EventEmitter {}
 
-var CHANGE_EVENT = 'change';
-var emitter = new TodoEmitter();
+const CHANGE_EVENT = 'change';
+const emitter = new TodoEmitter();
 
 class TodoStore {
   constructor() {
@@ -37,10 +37,12 @@ class TodoStore {
   }
 
   updateTodo(index, todo) {
+    console.log(`update todo in index ${index}`);
     this.todos[index] = todo;
   }
 
   addTodo(todo) {
+    console.log(`add a todo.`);
     this.todos.push(todo);
   }
 
@@ -48,13 +50,19 @@ class TodoStore {
     return this.todos;
   }
 
+  getTodo(index) {
+    return this.todos[index];
+  }
+
   loadTodosFromStorage() {
+    console.log(`load todos from local storage`);
+
     AsyncStorage.getItem('RNTodoFlux', (err, result) => {
       if(err) {
         console.log(err);
       } else {
         if(result === null) {
-          todos = [
+          this.todos = [
             {
               title: 'Add a TODO item',
               content: 'You can add a \"Todo\" item by hit toolbar button, or click list item to update.',
@@ -71,7 +79,7 @@ class TodoStore {
   }
 }
 
-var store = new TodoStore();
+const store = new TodoStore();
 
 TodoDispatcher.register(function(action) {
 
@@ -79,6 +87,7 @@ TodoDispatcher.register(function(action) {
     case TodoConstants.ACTION.ACTION_CREATE:
       store.addTodo(action.todo);
       store.emitChange();
+      console.log('add todo');
       break;
 
     case TodoConstants.ACTION.ACTION_UPDATE:
@@ -89,6 +98,7 @@ TodoDispatcher.register(function(action) {
       break;
 
     case TodoConstants.ACTION.ACTION_INIT:
+      console.log('init');
       store.loadTodosFromStorage();
       break;
   }

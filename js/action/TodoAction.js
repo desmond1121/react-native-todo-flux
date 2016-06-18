@@ -1,19 +1,21 @@
-var TodoDispatcher = require('../dispatcher/TodoDispatcher');
-var TodoConstants = require('../common/TodoConstants');
+const TodoDispatcher = require('../dispatcher/TodoDispatcher');
+const TodoConstants = require('../common/TodoConstants');
 
-var TodoAction = {
-  init: function() {
+class TodoAction {
+  init() {
     TodoDispatcher.dispatch({
       actionType: TodoConstants.ACTION.ACTION_INIT
     });
-  },
-  create: function(todo) {
+  }
+
+  create(todo) {
     TodoDispatcher.dispatch({
       actionType: TodoConstants.ACTION.ACTION_CREATE,
       todo: todo
     });
-  },
-  update: function(index, todo) {
+  }
+
+  update(index, todo) {
     TodoDispatcher.dispatch({
       actionType: TodoConstants.ACTION.ACTION_UPDATE,
       todo: todo,
@@ -22,4 +24,6 @@ var TodoAction = {
   }
 };
 
-module.exports = TodoAction;
+const action = new TodoAction();
+
+module.exports = action;

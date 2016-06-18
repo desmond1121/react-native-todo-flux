@@ -9,7 +9,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-var TodoStyle = require('../common/TodoStyle');
+const TodoStyle = require('../common/TodoStyle');
 
 class TodoItem extends React.Component {
   render(){
@@ -25,7 +25,7 @@ class TodoItem extends React.Component {
   }
 }
 
-var style = StyleSheet.create({
+const style = StyleSheet.create({
   todoItem: {
     marginTop: 4,
     padding: 10,

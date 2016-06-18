@@ -7,11 +7,11 @@ import React, {
   Component
 } from 'react';
 
-var TodoList = require('./TodoList');
-var AddTodo = require('./AddTodo');
-var TodoConstants = require('../common/TodoConstants');
+const TodoList = require('./TodoList');
+const AddTodo = require('./AddTodo');
+const TodoConstants = require('../common/TodoConstants');
 
-var _navigator;
+let _navigator;
 
 BackAndroid.addEventListener('hardwareBackPress', function() {
   if (_navigator.getCurrentRoutes().length === 1) {

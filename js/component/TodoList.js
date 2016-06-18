@@ -10,14 +10,14 @@ import {
   ListView
 } from 'react-native';
 
-var TodoStore = require('../store/TodoStore');
-var TodoAction = require('../action/TodoAction');
-var TodoConstants = require('../common/TodoConstants');
-var TodoItem = require('./TodoItem');
-var TodoStyle = require('../common/TodoStyle');
-var assign = require('object-assign');
+const TodoStore = require('../store/TodoStore');
+const TodoAction = require('../action/TodoAction');
+const TodoConstants = require('../common/TodoConstants');
+const TodoItem = require('./TodoItem');
+const TodoStyle = require('../common/TodoStyle');
+const assign = require('object-assign');
 
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -83,7 +83,7 @@ class TodoList extends React.Component {
             flex: 1
           }}
           dataSource={this.state.dataSource}
-          renderRow={(rowData, sectionID, rowID) => <TodoItem data={rowData} onPress={this.editTodo.bind(this, rowID, rowData)}/>}
+          renderRow={(rowData, sectionID, rowID) => <TodoItem data={rowData} onPress={this.editTodo.bind(this, rowID)}/>}
         />
       );
     }
@@ -95,10 +95,11 @@ class TodoList extends React.Component {
     }
   }
 
-  editTodo(index, todo) {
-    var route = assign({}, TodoConstants.ROUTE.add, {
+  editTodo(index) {
+    console.log(`edit ${index}`);
+    let route = assign({}, TodoConstants.ROUTE.add, {
       index: index,
-      todo: todo
+      todo: TodoStore.getTodo(index)
     });
     this.props.navigator.push(route);
   }

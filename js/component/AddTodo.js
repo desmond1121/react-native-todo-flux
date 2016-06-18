@@ -12,13 +12,14 @@ import React, {
   Component
 } from 'react';
 
-var moment = require('moment');
-var TodoAction = require('../action/TodoAction');
-var TodoStyle = require('../common/TodoStyle');
-var TodoConstants = require('../common/TodoConstants');
+const assign = require('object-assign');
+const moment = require('moment');
+const TodoAction = require('../action/TodoAction');
+const TodoStyle = require('../common/TodoStyle');
+const TodoConstants = require('../common/TodoConstants');
 
-var _todo = {};
-var index = -1;
+const _todo = {};
+const index = -1;
 
 class AddTodo extends React.Component {
   constructor(props) {
@@ -103,9 +104,9 @@ class AddTodo extends React.Component {
   onActionSelected(position) {
     if(position == 0) {
       if(this.isEdit) {
-        TodoAction.update(index, _todo);
+        TodoAction.update(index, assign({}, _todo));
       } else {
-        TodoAction.create(_todo);
+        TodoAction.create(assign({}, _todo));
       }
       this.props.navigator.pop();
     }
@@ -133,7 +134,7 @@ class AddTodo extends React.Component {
   }
 }
 
-var style = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 50,

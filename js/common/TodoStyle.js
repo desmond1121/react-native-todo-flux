@@ -9,8 +9,8 @@ module.exports = StyleSheet.create({
     backgroundColor: "whitesmoke"
   },
   toolbar: {
-    height: 50,
-    backgroundColor: "deeppink",
+    height: PixelRatio.getPixelSizeForLayoutSize(20),
+    backgroundColor: "#1976D2",
     justifyContent: "center"
   }
 });
