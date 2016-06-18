@@ -116,6 +116,10 @@ class AddTodo extends React.Component {
     _todo[key] = value;
   }
 
+  onChangeTimeIOS() {
+
+  }
+
   async showTimePicker() {
     try {
       const {action, year, month, day} = await DatePickerAndroid.open({
