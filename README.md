@@ -1,5 +1,14 @@
 # RNTodoFlux
-React Native todo-example, using flux architecture.
+React Native todo-example, using ES6 & flux architecture.
+
+## Use API & Component
+
+RN version: 0.27
+
+- Event system - [EventEmitter](https://nodejs.org/api/events.html)
+- Data ORM - [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage.html)
+- Date format - [MomentJS](http://momentjs.com/)
+- Object copy - [object-assign](https://github.com/sindresorhus/object-assign)
 
 ## Android snapshot
 
