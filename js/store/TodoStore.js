@@ -1,89 +1,85 @@
-import {
-  AsyncStorage
-} from 'react-native';
+//@flow
 
 const EventEmitter = require('events').EventEmitter;
-const assign = require('object-assign');
-const TodoDispatcher = require('../dispatcher/TodoDispatcher');
 const TodoConstants = require('../common/TodoConstants');
+const TodoDispatcher = require('../dispatcher/TodoDispatcher');
 const moment = require('moment');
 
-class TodoEmitter extends EventEmitter {}
+import {AsyncStorage} from 'react-native';
 
-const CHANGE_EVENT = 'change';
-const emitter = new TodoEmitter();
+class TodoEmitter extends EventEmitter { }
+
+const CHANGE_EVENT : string = 'change';
+const emitter : Object = new TodoEmitter();
+let todos : Array<Object> = [];
 
 class TodoStore {
-  constructor() {
-    this.todos = [];
-  }
 
-  registerCallback(callback) {
+  registerCallback(callback : function) {
     emitter.on(CHANGE_EVENT, callback);
   }
 
-  unRegisterCallback(callback) {
+  unRegisterCallback(callback : function) {
     emitter.removeListener(CHANGE_EVENT, callback);
   }
 
   emitChange() {
-    AsyncStorage.setItem('RNTodoFlux', JSON.stringify(this.todos), (err) => {
-      if(err) {
+    AsyncStorage.setItem('RNTodoFlux', JSON.stringify(todos), (err) => {
+      if (err) {
         console.log(err);
       }
     });
-
     emitter.emit(CHANGE_EVENT);
   }
 
-  updateTodo(index, todo) {
+  updateTodo(index : number, todo : Object) {
     console.log(`update todo in index ${index}`);
-    this.todos[index] = todo;
+    todos[index] = todo;
   }
 
-  addTodo(todo) {
+  addTodo(todo : Object) {
     console.log(`add a todo.`);
-    this.todos.push(todo);
+    todos.push(todo);
   }
 
   getTodos() {
-    return this.todos;
+    return todos;
   }
 
-  getTodo(index) {
-    return this.todos[index];
+  getTodo(index : number) {
+    return todos[index];
   }
 
   loadTodosFromStorage() {
     console.log(`load todos from local storage`);
-
-    AsyncStorage.getItem('RNTodoFlux', (err, result) => {
-      if(err) {
-        console.log(err);
-      } else {
-        if(result === null) {
-          this.todos = [
-            {
-              title: 'Add a TODO item',
-              content: 'You can add a \"Todo\" item by hit toolbar button, or click list item to update.',
-              time: moment().format(TodoConstants.DATE_FORMAT)
-            }
-          ];
-          this.emitChange();
+    AsyncStorage.getItem(
+      'RNTodoFlux',
+      (err, result) => {
+        if (err) {
+          console.log(err);
         } else {
-          this.todos = JSON.parse(result);
-          emitter.emit(CHANGE_EVENT);
+          if (result === null) {
+            todos = [
+              {
+                title: 'Add a TODO item',
+                content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
+                time: moment().format(TodoConstants.DATE_FORMAT),
+              },
+            ];
+            this.emitChange();
+          } else {
+            todos = JSON.parse(result);
+            emitter.emit(CHANGE_EVENT);
+          }
         }
-      }
-    });
+      },
+    );
   }
 }
 
 const store = new TodoStore();
-
 TodoDispatcher.register(function(action) {
-
-  switch(action.actionType) {
+  switch (action.actionType) {
     case TodoConstants.ACTION.ACTION_CREATE:
       store.addTodo(action.todo);
       store.emitChange();
@@ -94,7 +90,7 @@ TodoDispatcher.register(function(action) {
       store.updateTodo(action.index, action.todo);
       store.emitChange();
       console.log('update ' + action.index);
-      console.log(store.todos);
+      console.log(todos);
       break;
 
     case TodoConstants.ACTION.ACTION_INIT:
@@ -103,6 +99,5 @@ TodoDispatcher.register(function(action) {
       break;
   }
 });
-
 
 module.exports = store;
