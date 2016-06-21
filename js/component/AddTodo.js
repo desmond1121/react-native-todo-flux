@@ -1,3 +1,5 @@
+//@flow
+
 import {
   View,
   TextInput,
@@ -14,14 +16,21 @@ import React, {
 
 const assign = require('object-assign');
 const moment = require('moment');
-const TodoAction = require('../action/TodoAction');
-const TodoStyle = require('../common/TodoStyle');
-const TodoConstants = require('../common/TodoConstants');
 
-const _todo = {};
-const index = -1;
+import TodoAction from '../action/TodoAction';
+import TodoStyle from '../common/TodoStyle';
+import {ROUTE, ACTION} from '../common/TodoConstants';
+import type {Todo} from '../flow/FlowType';
+
+const _todo : Todo = {};
+const index : number = -1;
 
 class AddTodo extends React.Component {
+  props: {
+    index: number,
+    todo: Todo
+  };
+
   constructor(props) {
     super(props);
     if(typeof props.todo === 'undefined') {

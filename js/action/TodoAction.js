@@ -1,5 +1,8 @@
-const TodoDispatcher = require('../dispatcher/TodoDispatcher');
-const TodoConstants = require('../common/TodoConstants');
+//@flow
+
+import TodoDispatcher from '../dispatcher/TodoDispatcher';
+import {ACTION, ROUTE} from '../common/TodoConstants';
+import type {Todo} from '../flow/FlowType';
 
 class TodoAction {
   init() {
@@ -8,14 +11,14 @@ class TodoAction {
     });
   }
 
-  create(todo) {
+  create(todo : Todo) {
     TodoDispatcher.dispatch({
       actionType: TodoConstants.ACTION.ACTION_CREATE,
       todo: todo
     });
   }
 
-  update(index, todo) {
+  update(index : number, todo : Todo) {
     TodoDispatcher.dispatch({
       actionType: TodoConstants.ACTION.ACTION_UPDATE,
       todo: todo,
@@ -24,6 +27,4 @@ class TodoAction {
   }
 };
 
-const action = new TodoAction();
-
-module.exports = action;
+export default new TodoAction();

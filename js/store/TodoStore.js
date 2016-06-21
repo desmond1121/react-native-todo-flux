@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events').EventEmitter;
 const TodoConstants = require('../common/TodoConstants');
-const TodoDispatcher = require('../dispatcher/TodoDispatcher');
+import TodoDispatcher from '../dispatcher/TodoDispatcher';
 const moment = require('moment');
 
 import {AsyncStorage} from 'react-native';

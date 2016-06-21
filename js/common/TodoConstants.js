@@ -1,21 +1,23 @@
-const keyMirror = require('keymirror');
+const keyMirror : function = require('keymirror');
 
-exports.ROUTE = {
-  main: {
+type route = {name: string; index: number};
+
+export ROUTE = {
+  main: route = {
     name: "Main",
     index: 0
   },
-  add: {
+  add: route = {
     name: "Add",
     index: 1
   }
 };
 
-exports.ACTION = keyMirror({
+export ACTION : Object = keyMirror({
   ACTION_CREATE: null,
   ACTION_UPDATE: null,
   ACTION_REMOVE: null,
   ACTION_INIT: null
 });
 
-exports.DATE_FORMAT = 'YYYY-MM-DD';
+export DATE_FORMAT : string = 'YYYY-MM-DD';
