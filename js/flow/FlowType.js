@@ -5,3 +5,9 @@ export type Todo = {
   time: string,
   content: string
 };
+
+export type route = {
+  name: string,
+  index: number,
+  todo? : Todo
+};

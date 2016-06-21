@@ -1,7 +1,20 @@
+//@flow
+
 import {
   StyleSheet,
-  PixelRatio
+  PixelRatio,
+  Platform,
+  NativeModules
 } from 'react-native';
+
+export let Color = {
+  colorPrimary : "#1976D2"
+};
+
+export let Dimen = {
+  toolbarHeight : PixelRatio.getPixelSizeForLayoutSize(20),
+  statusBarHeight : PixelRatio.getPixelSizeForLayoutSize(8)
+};
 
 export default StyleSheet.create({
   container: {
@@ -10,7 +23,7 @@ export default StyleSheet.create({
   },
   toolbar: {
     height: PixelRatio.getPixelSizeForLayoutSize(20),
-    backgroundColor: "#1976D2",
-    justifyContent: "center"
+    backgroundColor: Color.colorPrimary,
+    justifyContent: "center",
   }
 });

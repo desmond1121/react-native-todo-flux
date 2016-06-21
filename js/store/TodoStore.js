@@ -1,9 +1,10 @@
 //@flow
 
 const EventEmitter = require('events').EventEmitter;
+const moment = require('moment');
 const TodoConstants = require('../common/TodoConstants');
 import TodoDispatcher from '../dispatcher/TodoDispatcher';
-const moment = require('moment');
+import type {Todo} from '../flow/FlowType';
 
 import {AsyncStorage} from 'react-native';
 
@@ -11,15 +12,15 @@ class TodoEmitter extends EventEmitter { }
 
 const CHANGE_EVENT : string = 'change';
 const emitter : Object = new TodoEmitter();
-let todos : Array<Object> = [];
+let todos : Array<Todo> = [];
 
 class TodoStore {
 
-  registerCallback(callback : function) {
+  registerCallback(callback : () => void ) {
     emitter.on(CHANGE_EVENT, callback);
   }
 
-  unRegisterCallback(callback : function) {
+  unRegisterCallback(callback : () => void ) {
     emitter.removeListener(CHANGE_EVENT, callback);
   }
 

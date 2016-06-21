@@ -1,13 +1,19 @@
-const AddTodo = require('AddTodo.react');
-const BackAndroid = require('BackAndroid');
-const Navigator = require('Navigator.react');
-const React = require('React');
-const TodoConstants = require('../common/TodoConstants');
-const TodoList = require('TodoList.react');
+//@flow
+
+import {
+  ACTION,
+  ROUTE
+} from '../common/TodoConstants';
+
+import AddTodo from './AddTodo';
+import TodoList from './TodoList';
 
 import {Navigator, BackAndroid} from 'react-native';
 import React, {Component} from 'react';
-let _navigator;
+import type {route} from '../flow/FlowType';
+
+let _navigator : ReactClass<Navigator>;
+
 BackAndroid.addEventListener('hardwareBackPress', function() {
   if (_navigator.getCurrentRoutes().length === 1) {
     BackAndroid.exitApp();
@@ -19,11 +25,15 @@ BackAndroid.addEventListener('hardwareBackPress', function() {
 });
 
 class TodoNavigator extends React.Component {
+  props: {
+
+  };
+
   constructor(props) {
     super(props);
   }
 
-  _renderScene(route, navigator) {
+  _renderScene(route : route, navigator : ReactClass<Navigator>) {
     _navigator = navigator;
 
     switch (route.name) {
@@ -41,9 +51,11 @@ class TodoNavigator extends React.Component {
   }
 
   render() {
-    return (<Navigator initialRoute={TodoConstants.ROUTE.main} renderScene={
-      this._renderScene
-    } />);
+    return (
+      <Navigator
+        initialRoute={ROUTE.main}
+        renderScene={this._renderScene} />
+      );
   }
 }
 

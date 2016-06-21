@@ -19,25 +19,35 @@ const moment = require('moment');
 
 import TodoAction from '../action/TodoAction';
 import TodoStyle from '../common/TodoStyle';
-import {ROUTE, ACTION} from '../common/TodoConstants';
+import {ROUTE, ACTION, DATE_FORMAT} from '../common/TodoConstants';
 import type {Todo} from '../flow/FlowType';
+import TodoToolbar from './TodoToolbar';
 
 const _todo : Todo = {};
 const index : number = -1;
 
 class AddTodo extends React.Component {
+  isEdit: boolean;
+  title: string;
+
   props: {
-    index: number,
-    todo: Todo
+    navigator : ReactClass<Navigator>,
+    index : number,
+    todo ?: Todo
+  };
+
+  state: {
+    time: string
   };
 
   constructor(props) {
     super(props);
+
     if(typeof props.todo === 'undefined') {
       this.isEdit = false;
       _todo = {
         title: 'Todo',
-        time: moment().format(TodoConstants.DATE_FORMAT),
+        time: moment().format(DATE_FORMAT),
         content: 'Todo Content'
       };
     } else { // update a 'Todo' object
@@ -62,9 +72,8 @@ class AddTodo extends React.Component {
   render(){
     return (
       <View style={TodoStyle.container}>
-        <ToolbarAndroid
+        <TodoToolbar
           title={this.title}
-          style={TodoStyle.toolbar}
           actions={[{title: 'Done', show: 'always', showWithText:true}]}
           onActionSelected={this.onActionSelected.bind(this)}
         />
@@ -110,7 +119,7 @@ class AddTodo extends React.Component {
     );
   }
 
-  onActionSelected(position) {
+  onActionSelected(position : number) : void {
     if(position == 0) {
       if(this.isEdit) {
         TodoAction.update(index, assign({}, _todo));
@@ -121,7 +130,7 @@ class AddTodo extends React.Component {
     }
   }
 
-  onChangeText(key, value) {
+  onChangeText(key : string, value : string) : void{
     _todo[key] = value;
   }
 

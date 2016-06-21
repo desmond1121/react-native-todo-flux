@@ -1,24 +1,44 @@
-const ListView = require('ListView');
-const ProgressBarAndroid = require('ProgressBarAndroid.react');
-const React = require('React');
-const TodoAction = require('../action/TodoAction');
-const TodoConstants = require('../common/TodoConstants');
-const TodoItem = require('TodoItem.react');
-const TodoStore = require('../store/TodoStore');
-const TodoStyle = require('../common/TodoStyle');
-const ToolbarAndroid = require('ToolbarAndroid.react');
-const View = require('View.react');
+//@flow
+
+import TodoAction from '../action/TodoAction';
+import TodoItem from './TodoItem';
+import TodoStore from '../store/TodoStore';
+import TodoStyle from '../common/TodoStyle';
+import TodoToolbar from './TodoToolbar';
+
+import React, {Component} from 'react';
+import {
+  Text,
+  View,
+  ProgressBarAndroid,
+  ListView
+} from 'react-native';
+
+import {
+  ROUTE,
+  ACTION
+} from '../common/TodoConstants';
 
 const assign = require('object-assign');
 
-import React, {Component} from 'react';
-import {Text, View, ProgressBarAndroid, ToolbarAndroid, ListView} from 'react-native';
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-class TodoList extends React.Component {
+export default class TodoList extends React.Component {
+  state: {
+    isLoading: boolean,
+    dataSource: any
+  };
+
+  props: {
+    navigator: ReactClass<Navigator>
+  };
+
   constructor(props) {
     super(props);
-    this.state = {isLoading: true};
+    this.state = {
+      isLoading: true,
+      dataSource: ds.cloneWithRows([])
+    };
   }
 
   componentWillMount() {
@@ -30,41 +50,29 @@ class TodoList extends React.Component {
     TodoStore.unRegisterCallback(this.onChangeData.bind(this));
   }
 
-  onChangeData() {
-    this.setState({
-      isLoading: false,
-      dataSource: ds.cloneWithRows(TodoStore.getTodos()),
-    });
-  }
-
   render() {
     return (
         <View
         style={TodoStyle.container}>
 
-
-          <ToolbarAndroid
+          <TodoToolbar
             title="RNTodoFlux"
-            style={TodoStyle.toolbar}
             actions={[{title: 'Add', show: 'always', showWithText: true}]}
-            onActionSelected={(position) => this._onActionSelected(
+            onActionSelected={(position) => this.onActionSelected(
               position,
               this.props.navigator,
             )}
           />
 
-
-
-
-        {this._renderContent.bind(this)()}
-
-
+        {
+          this.renderContent.bind(this)()
+        }
 
       </View>
     );
   }
 
-  _renderContent() {
+  renderContent() {
     if (this.state.isLoading) {
       return (<ProgressBarAndroid indeterminate={true} style={{
         flex: 1,
@@ -75,30 +83,36 @@ class TodoList extends React.Component {
         <ListView
           style={{flex: 1}}
           dataSource={this.state.dataSource}
-          renderRow={(rowData, sectionID, rowID) => <TodoItem
-            data={rowData}
-            onPress={this.editTodo.bind(this, rowID)}
-          />}
+          renderRow={(rowData, sectionID, rowID) =>
+            <TodoItem
+              data={rowData}
+              onPress={this.editTodo.bind(this, rowID)}
+            />}
         />
       );
     }
   }
 
-  _onActionSelected(position, navigator) {
+  onChangeData() : void {
+    this.setState({
+      isLoading: false,
+      dataSource: ds.cloneWithRows(TodoStore.getTodos()),
+    });
+  }
+
+  onActionSelected(position : number, navigator : ReactClass<Navigator>) : void {
     if (position == 0) {
-      navigator.push(TodoConstants.ROUTE.add);
+      navigator.push(ROUTE.add);
     }
   }
 
-  editTodo(index) {
+  editTodo(index : number) : void {
     console.log(`edit ${index}`);
     let route = assign(
       {},
-      TodoConstants.ROUTE.add,
+      ROUTE.add,
       {index: index, todo: TodoStore.getTodo(index)},
     );
     this.props.navigator.push(route);
   }
 }
-
-module.exports = TodoList;

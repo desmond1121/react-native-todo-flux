@@ -5,22 +5,22 @@ import {ACTION, ROUTE} from '../common/TodoConstants';
 import type {Todo} from '../flow/FlowType';
 
 class TodoAction {
-  init() {
+  init() : void{
     TodoDispatcher.dispatch({
-      actionType: TodoConstants.ACTION.ACTION_INIT
+      actionType: ACTION.ACTION_INIT
     });
   }
 
-  create(todo : Todo) {
+  create(todo : Todo) : void {
     TodoDispatcher.dispatch({
-      actionType: TodoConstants.ACTION.ACTION_CREATE,
+      actionType: ACTION.ACTION_CREATE,
       todo: todo
     });
   }
 
-  update(index : number, todo : Todo) {
+  update(index : number, todo : Todo) : void {
     TodoDispatcher.dispatch({
-      actionType: TodoConstants.ACTION.ACTION_UPDATE,
+      actionType: ACTION.ACTION_UPDATE,
       todo: todo,
       index: index
     });
