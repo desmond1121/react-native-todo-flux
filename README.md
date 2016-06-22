@@ -3,7 +3,7 @@ React Native todo-example, using ES6 & flux architecture & flow.
 
 ## Use API & Component
 
-RN version: 0.27
+RN version: 0.28
 
 - Code check - [flow](https://flowtype.org)
 - Event system - [EventEmitter](https://nodejs.org/api/events.html)
