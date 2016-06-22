@@ -18,7 +18,7 @@ React Native todo-example, using ES6 & flux architecture & flow.
 
 ![flux-ios](flux_ios.gif)
 
-**Tips: Distortion in transaction of page which contains DatePicker seems a bug. **
+** Tips: Distortion in transaction of page which contains DatePicker seems a bug. **
 
 ## Build
 
