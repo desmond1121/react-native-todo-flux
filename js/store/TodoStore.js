@@ -1,15 +1,14 @@
 //@flow
 
 const EventEmitter = require('events').EventEmitter;
-const moment = require('moment');
 const keyMirror = require('keymirror');
 import {ACTION, DATE_FORMAT} from '../common/TodoConstants';
 import TodoDispatcher from '../dispatcher/TodoDispatcher';
 import type {Todo} from '../flow/FlowType';
 import {AsyncStorage} from 'react-native';
 
-
 class TodoEmitter extends EventEmitter {}
+const AsyncStorageTAG : string = 'TodoFlux';
 const emitter : TodoEmitter = new TodoEmitter();
 
 type eventType = {
@@ -38,7 +37,7 @@ class TodoStore {
   }
 
   emitDataChange() {
-    AsyncStorage.setItem('RNTodoFlux', JSON.stringify(this.todos), (err) => {
+    AsyncStorage.setItem(AsyncStorageTAG, JSON.stringify(this.todos), (err) => {
       if (err) {
         console.log(err);
       }
@@ -65,36 +64,30 @@ class TodoStore {
   }
 
   loadTodosFromStorage() {
-    console.log(`load todos from local storage`);
 
     AsyncStorage.getItem(
-      'RNTodoFlux',
+      AsyncStorageTAG,
       (err, result) => {
         if (err) {
           console.log(err);
         } else {
-          this.todos = [
-            {
-              title: 'Add a TODO item',
-              content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
-              date: new Date()
-            },
-          ];
-          this.emitDataChange();
-
-          // if (result === null) {
-          //   this.todos = [
-          //     {
-          //       title: 'Add a TODO item',
-          //       content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
-          //       date: new Date()
-          //     },
-          //   ];
-          //   this.emitDataChange();
-          // } else {
-          //   this.todos = JSON.parse(result);
-          //   emitter.emit(TodoEvent.DATA_CHANGE);
-          // }
+          if (result === null) {
+            this.todos = [
+              {
+                title: 'Add a TODO item',
+                content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
+                date: new Date()
+              },
+            ];
+            this.emitDataChange();
+          } else {
+            this.todos = JSON.parse(result);
+            // decode Date from json
+            this.todos.forEach((todo) => {
+              todo.date = new Date(todo.date);
+            });
+            emitter.emit(TodoEvent.DATA_CHANGE);
+          }
         }
       },
     );

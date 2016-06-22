@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 
 export let Color = {
-  colorPrimary : "#1976D2"
+  colorPrimary : "#3F51B5",
+  textColorPrimary : 'white'
 };
 
 export let Dimen = {

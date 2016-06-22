@@ -10,7 +10,7 @@ import {
   Platform
 } from 'react-native';
 
-import TodoNavigator from './component/android/TodoNavigator';
+import TodoNavigator from './component/TodoNavigator';
 
 class TodoFluxApp extends React.Component{
   render () {
