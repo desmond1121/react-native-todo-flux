@@ -2,103 +2,140 @@
 
 const EventEmitter = require('events').EventEmitter;
 const moment = require('moment');
-const TodoConstants = require('../common/TodoConstants');
+const keyMirror = require('keymirror');
+import {ACTION, DATE_FORMAT} from '../common/TodoConstants';
 import TodoDispatcher from '../dispatcher/TodoDispatcher';
 import type {Todo} from '../flow/FlowType';
-
 import {AsyncStorage} from 'react-native';
 
-class TodoEmitter extends EventEmitter { }
 
-const CHANGE_EVENT : string = 'change';
-const emitter : Object = new TodoEmitter();
-let todos : Array<Todo> = [];
+class TodoEmitter extends EventEmitter {}
+const emitter : TodoEmitter = new TodoEmitter();
+
+type eventType = {
+  DATA_CHANGE: string,
+  TIME_PICKER_OPEN : string,
+  TIME_PICKER_SET : string
+};
 
 class TodoStore {
+  todos: Array<Todo>;
 
-  registerCallback(callback : () => void ) {
-    emitter.on(CHANGE_EVENT, callback);
+  constructor() {
+    this.todos = [];
   }
 
-  unRegisterCallback(callback : () => void ) {
-    emitter.removeListener(CHANGE_EVENT, callback);
+  registerCallback(event: string, callback : (date ?: Date) => void ) {
+    emitter.on(event, callback);
   }
 
-  emitChange() {
-    AsyncStorage.setItem('RNTodoFlux', JSON.stringify(todos), (err) => {
+  unRegisterCallback(event: string, callback : (date ?: Date) => void ) {
+    emitter.removeListener(event, callback);
+  }
+
+  emitDateEvent(event: string, date: Date) {
+    emitter.emit(event, date);
+  }
+
+  emitDataChange() {
+    AsyncStorage.setItem('RNTodoFlux', JSON.stringify(this.todos), (err) => {
       if (err) {
         console.log(err);
       }
     });
-    emitter.emit(CHANGE_EVENT);
+    emitter.emit(TodoEvent.DATA_CHANGE);
   }
 
   updateTodo(index : number, todo : Object) {
     console.log(`update todo in index ${index}`);
-    todos[index] = todo;
+    this.todos[index] = todo;
   }
 
   addTodo(todo : Object) {
     console.log(`add a todo.`);
-    todos.push(todo);
+    this.todos.push(todo);
   }
 
   getTodos() {
-    return todos;
+    return this.todos;
   }
 
   getTodo(index : number) {
-    return todos[index];
+    return this.todos[index];
   }
 
   loadTodosFromStorage() {
     console.log(`load todos from local storage`);
+
     AsyncStorage.getItem(
       'RNTodoFlux',
       (err, result) => {
         if (err) {
           console.log(err);
         } else {
-          if (result === null) {
-            todos = [
-              {
-                title: 'Add a TODO item',
-                content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
-                time: moment().format(TodoConstants.DATE_FORMAT),
-              },
-            ];
-            this.emitChange();
-          } else {
-            todos = JSON.parse(result);
-            emitter.emit(CHANGE_EVENT);
-          }
+          this.todos = [
+            {
+              title: 'Add a TODO item',
+              content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
+              date: new Date()
+            },
+          ];
+          this.emitDataChange();
+
+          // if (result === null) {
+          //   this.todos = [
+          //     {
+          //       title: 'Add a TODO item',
+          //       content: 'You can add a "Todo" item by hit toolbar button, or click list item to update.',
+          //       date: new Date()
+          //     },
+          //   ];
+          //   this.emitDataChange();
+          // } else {
+          //   this.todos = JSON.parse(result);
+          //   emitter.emit(TodoEvent.DATA_CHANGE);
+          // }
         }
       },
     );
   }
 }
 
-const store = new TodoStore();
+let store = new TodoStore();
+
 TodoDispatcher.register(function(action) {
   switch (action.actionType) {
-    case TodoConstants.ACTION.ACTION_CREATE:
+    case ACTION.ACTION_CREATE:
       store.addTodo(action.todo);
-      store.emitChange();
+      store.emitDataChange();
       console.log('add todo');
       break;
 
-    case TodoConstants.ACTION.ACTION_UPDATE:
+    case ACTION.ACTION_UPDATE:
       store.updateTodo(action.index, action.todo);
-      store.emitChange();
+      store.emitDataChange();
       console.log('update ' + action.index);
-      console.log(todos);
       break;
 
-    case TodoConstants.ACTION.ACTION_INIT:
+    case ACTION.ACTION_INIT:
       console.log('init');
       store.loadTodosFromStorage();
+      break;
+
+    case ACTION.ACTION_TIME_PICKER_SHOW:
+      store.emitDateEvent(TodoEvent.TIME_PICKER_OPEN, action.date);
+      break;
+
+    case ACTION.ACTION_TIME_PICKER_SET:
+      store.emitDateEvent(TodoEvent.TIME_PICKER_SET, action.date);
       break;
   }
 });
 
-module.exports = store;
+export let TodoEvent : eventType = keyMirror({
+  DATA_CHANGE : null,
+  TIME_PICKER_OPEN : null,
+  TIME_PICKER_SET : null
+});
+
+export default store;

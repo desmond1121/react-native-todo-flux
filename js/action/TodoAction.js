@@ -25,6 +25,26 @@ class TodoAction {
       index: index
     });
   }
+
+  /**
+   * TimePicker set time.
+   */
+  showTimePicker(date : Date) : void {
+    TodoDispatcher.dispatch({
+      actionType: ACTION.ACTION_TIME_PICKER_SHOW,
+      date: date
+    });
+  }
+
+  /**
+   * TimePicker set time.
+   */
+  setTime(date : Date) : void {
+    TodoDispatcher.dispatch({
+      actionType: ACTION.ACTION_TIME_PICKER_SET,
+      date: date
+    });
+  }
 };
 
 export default new TodoAction();

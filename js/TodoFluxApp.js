@@ -6,8 +6,11 @@ import React, {
   Component
 } from 'react';
 
+import {
+  Platform
+} from 'react-native';
 
-var TodoNavigator = require('./component/TodoNavigator');
+import TodoNavigator from './component/android/TodoNavigator';
 
 class TodoFluxApp extends React.Component{
   render () {

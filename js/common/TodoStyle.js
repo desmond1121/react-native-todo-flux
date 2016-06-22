@@ -3,7 +3,6 @@
 import {
   StyleSheet,
   PixelRatio,
-  Platform,
   NativeModules
 } from 'react-native';
 
@@ -22,7 +21,7 @@ export default StyleSheet.create({
     backgroundColor: "whitesmoke"
   },
   toolbar: {
-    height: PixelRatio.getPixelSizeForLayoutSize(20),
+    height: Dimen.toolbarHeight,
     backgroundColor: Color.colorPrimary,
     justifyContent: "center",
   }

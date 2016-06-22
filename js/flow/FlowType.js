@@ -2,12 +2,14 @@
 
 export type Todo = {
   title: string,
-  time: string,
+  date: Date,
   content: string
 };
 
 export type route = {
+  title? : string,
   name: string,
   index: number,
-  todo? : Todo
+  todo? : Todo,
+  date? : Date
 };
