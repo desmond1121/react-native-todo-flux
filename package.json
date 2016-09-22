@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "react": "^15.0.2",
-    "react-native": "^0.28.0",
+    "react-native": "^0.33.0",
     "flux": "^2.1.1",
     "object-assign": "^4.1.0",
     "keymirror": "~0.1.0",
-    "events": "1.1.0"
+    "events": "1.1.1"
   }
 }

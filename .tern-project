@@ -1,5 +1,14 @@
 {
-    "plugins":{
-        "commonJS":{}
+  "ecmaVersion": 6,
+  "libs": [
+  ],
+  "plugins": {
+    "node": {},
+    "modules": {},
+    "es_modules": {},
+    "CommonJS": {},
+    "doc_comment": {
+      "fullDocs": true
     }
+  }
 }

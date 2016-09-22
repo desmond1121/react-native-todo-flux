@@ -49,7 +49,6 @@ class AddTodo extends React.Component {
   constructor(props) {
     super(props);
 
-
     if(typeof props.todo === 'undefined') {
       console.log('Add a todo');
       this.isEdit = false;
